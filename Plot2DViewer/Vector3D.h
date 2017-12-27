@@ -31,7 +31,7 @@ public:
 			Y * other.Z - Z * other.Y,
 			Z * other.X - X * other.Z,
 			X * other.Y - Y * other.X
-		)
+		);
 	}
 
 	/* Dot product */
@@ -71,24 +71,24 @@ public:
 
 	Vector3D operator * ( float Scale )
 	{
-		return Vector3D( X * Scale, Y * Scale, Z  Scale );
+		return Vector3D( X * Scale, Y * Scale, Z * Scale );
 	}
 
 	Vector3D operator / ( float Scale )
 	{
 		if ( Scale == 0 )
-			return;
+			return *this;
 
 		Scale = 1.f / Scale;
-		return Vector3D( X * Scale, Y * Scale, Z  Scale );
+		return Vector3D( X * Scale, Y * Scale, Z * Scale );
 	}
 
-	Vector3D operator == ( const Vector3D & other ) const
+	bool operator == ( const Vector3D & other ) const
 	{
 		return X == other.X && Y == other.Y && Z == other.Z;
 	}
 
-	Vector3D operator != ( const Vector3D & other ) const
+	bool operator != ( const Vector3D & other ) const
 	{
 		return X != other.X && Y != other.Y && Z != other.Z;
 	}

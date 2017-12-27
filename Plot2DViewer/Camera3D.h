@@ -14,6 +14,8 @@ private :
 	Matrix<> ViewToProject;
 	Matrix<> WorldToProject;
 
+public:
+
 	Camera3D( double L, double R, double B, double T ) : Camera2D( L, R, B, T )
 	{
 		SetOv( Vector3D( 0, 0, 0 ) );
@@ -22,12 +24,14 @@ private :
 		D = 10;
 	}
 
-public:
 	void SetOv	( Vector3D VectorToSet );
 	void SetTop	( Vector3D VectorToSet );
 	void SetN	( Vector3D VectorN );
+	void SetD	( double newD );
 
 	void UpdateCamera();
+
+	Matrix<> GetWorldToProject()					{ return WorldToProject; }
 };
 
 void Camera3D::SetOv( Vector3D newVector )
@@ -45,7 +49,34 @@ void Camera3D::SetN( Vector3D newVector )
 	N = newVector;
 }
 
+void Camera3D::SetD( double newD )
+{
+	D = newD;
+}
+
 void Camera3D::UpdateCamera()
 {
+	Vector3D i = ( Top ^ N );
+	i.Normalize();
 
+	Vector3D k = N;
+	k.Normalize();
+
+	Vector3D j = k ^ i;
+
+
+	double a [ ] = { i.X, i.Y, i.Z, -( i.X * Ov.X + i.Y * Ov.Y + i.Z * Ov.Z ),
+					j.X, j.Y, j.Z, -( j.X * Ov.X + j.Y * Ov.Y + j.Z * Ov.Z ),
+					k.X, k.Y, k.Z, -( k.X * Ov.X + k.Y * Ov.Y + k.Z * Ov.Z )
+	};
+
+	WorldToView = Matrix<>( 4, 4, a );
+
+	double b [ ] = { 1,0,0,0,
+					0,1,0,0,
+					0,0,-( 1 / D ),1 };
+
+	ViewToProject = Matrix<>( 4, 4, b );
+
+	WorldToProject = ViewToProject * WorldToView;
 }

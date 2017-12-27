@@ -4,10 +4,12 @@
 явный способ задани€ функции
 ћасштабирование с сохранением положений верхней и нижней границ окна
 */
+#pragma once
 
 #include <windows.h>
 #include <windowsx.h>
 #include "Scene2D.h"
+#include "Scene3D.h"
 #include "Matrix.h"
 #include "AffineTransform.h"
 #include "Model2D.h"
@@ -34,7 +36,7 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		(LPCSTR)"MainWindowClass",					// им€ оконного класса
 		(LPCSTR)"Plot2D Viewer",					// заголовок окна
 		WS_OVERLAPPEDWINDOW,						// стиль окна
-		200,200,400,400,							// координаты на экране левого верхнего угла окна, его ширина и высота
+		300,100,800,600,							// координаты на экране левого верхнего угла окна, его ширина и высота
 		nullptr,nullptr,hInstance,nullptr
 	);
 
@@ -57,6 +59,7 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 Model2D Model( "vertices.txt", "edges.txt" );
 Model3D SpaceModel( "vertices3d.txt", "faces.txt" );
 Scene2D Scene( L, R, B, T, Model );
+Scene3D SpaceScene( L, R, B, T, SpaceModel );
 
 float TranslationSpeed	= 1.f;
 float RotationSpeed		= 1.f;
@@ -78,7 +81,9 @@ LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)		// 
 			//Scene.ParametricPlot( dc, F );
 			//Scene.Plot( dc, Parabola );
 
-			Scene.Render( dc );
+			//Scene.Render( dc );
+
+			SpaceScene.Render( dc );
 
 			ReleaseDC( hWnd,dc );
 			return DefWindowProc( hWnd, msg, wParam, lParam );

@@ -8,7 +8,7 @@
 class Scene2D : public Camera2D
 {
 private:
-	typedef double( *Func )( double );
+	using Func = double( * )( double );
 	
 
 public:

@@ -52,10 +52,13 @@ public:
 	Matrix<> GetVertices() { return m_Vertices; }
 	Matrix<int> GetEdges() { return m_Edges; }
 	Matrix<int> GetFaces() { return m_Faces; }
-
+	Matrix<> GetProjectedVertices()	{ return m_ProjectedVertices; }
 	double GetVertexX( int Num );
 	double GetVertexY( int Num );
 	double GetVertexZ( int Num );
+
+	double GetProjectedX( int );
+	double GetProjectedY( int );
 
 	void SetEdges();
 
@@ -77,6 +80,16 @@ double Model3D::GetVertexY( int Num )
 double Model3D::GetVertexZ( int Num )
 {
 	return m_Vertices( 3, Num ) / m_Vertices( 4, Num );
+}
+
+double Model3D::GetProjectedX( int Num )
+{
+	return m_ProjectedVertices( 1, Num ) / m_ProjectedVertices( 3, Num );
+}
+
+double Model3D::GetProjectedY( int Num )
+{
+	return m_ProjectedVertices( 2, Num ) / m_ProjectedVertices( 3, Num );
 }
 
 void Model3D::SetEdges()
@@ -126,5 +139,5 @@ void Model3D::Apply( Matrix<> M )
 
 void Model3D::Project( Matrix<> M )
 {
-
+	m_ProjectedVertices = M * m_Vertices;
 }

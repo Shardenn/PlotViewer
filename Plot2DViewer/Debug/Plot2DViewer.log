@@ -9,13 +9,16 @@ c:\users\андрей\documents\компьютерная графика\plot2dvi
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\camera2d.h(105): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\camera2d.h(123): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\affinetransform.h(70): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(175): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(176): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(184): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(185): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(193): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(194): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(196): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(197): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\vector3d.h(40): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\vector3d.h(98): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(180): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(181): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(189): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(190): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(198): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(199): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(201): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\plot2dviewer.cpp(202): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\affinetransform.h(66): warning C4715: 'Mapping': not all control paths return a value
+cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
   Plot2DViewer.vcxproj -> C:\Users\Андрей\Documents\Компьютерная графика\Plot2DViewer - First Method\Debug\Plot2DViewer.exe
