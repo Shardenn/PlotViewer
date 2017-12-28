@@ -102,6 +102,9 @@ public:
 	{
 		const float fLength = Length();
 
+		if ( fLength == 0 )
+			return;
+
 		X /= fLength;
 		Y /= fLength;
 		Z /= fLength;

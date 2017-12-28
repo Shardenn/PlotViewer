@@ -13,6 +13,8 @@ public:
 	}
 
 	void Render( HDC dc, bool axes = true );
+
+	Model3D * GetModel()				{ return &Model; }
 };
 
 void Scene3D::Render( HDC dc, bool axes )
@@ -24,9 +26,20 @@ void Scene3D::Render( HDC dc, bool axes )
 
 	Model.Project( GetWorldToProject() );
 
-	for ( int i = 0; i < Model.GetEdges().GetRowsCount(); i++ )
+	Matrix<int> edges = Model.GetEdges();
+ 	for ( int i = 1; i <= edges.GetRowsCount(); i++ )
 	{
-		MoveTo( Model.GetProjectedX( Model.GetEdges()( i, 1 ) ), Model.GetProjectedY( Model.GetEdges()( i, 1 ) ) );
-		LineTo( dc, Model.GetProjectedX( Model.GetEdges()( i, 2 ) ), Model.GetProjectedY( Model.GetEdges()( i, 2 ) ) );
+		double a = edges( i, 1 );
+		double b = edges( i, 2 );
+
+		double ProjectedX = Model.GetProjectedX( a );
+		double ProjectedY = Model.GetProjectedY( a );
+
+		MoveTo( ProjectedX, ProjectedY );
+
+		ProjectedX = Model.GetProjectedX( b );
+		ProjectedY = Model.GetProjectedY( b );
+
+		LineTo( dc, ProjectedX, ProjectedY );
 	}
 }

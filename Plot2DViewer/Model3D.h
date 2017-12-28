@@ -14,6 +14,11 @@ private:
 	Matrix<int> m_Edges;
 	int			m_FacesCount;
 	Matrix<>	m_CumulativeAT;
+
+	bool bIsDragging = false;
+	bool bIsRotated = false;
+	bool bIsScaled = false;
+
 public:
 	Model3D() :
 		m_Vertices(),
@@ -40,19 +45,33 @@ public:
 		VerticesFlow >> m_Vertices;
 
 		ifstream FacesFlow( FacesName );
-		
+
 		int eRows, eColumns;
 		FacesFlow >> eRows >> eColumns;
 		m_Faces.ReallocateCells( eRows, eColumns );
 		FacesFlow >> m_Faces;
 
+		m_FacesCount = eRows;
+		m_InitialVertices = m_Vertices;
+		m_CumulativeAT = Identity3D();
+
 		SetEdges();
+	}
+
+	bool isDragged()									{ return bIsDragging; }
+	void SetDragged( bool NewDragged )					{ bIsDragging = NewDragged; }
+
+	void StopAllActions()
+	{
+		bIsDragging = false;
+		bIsRotated = false;
+		bIsScaled = false;
 	}
 
 	Matrix<> GetVertices() { return m_Vertices; }
 	Matrix<int> GetEdges() { return m_Edges; }
 	Matrix<int> GetFaces() { return m_Faces; }
-	Matrix<> GetProjectedVertices()	{ return m_ProjectedVertices; }
+	Matrix<> GetProjectedVertices()						{ return m_ProjectedVertices; }
 	double GetVertexX( int Num );
 	double GetVertexY( int Num );
 	double GetVertexZ( int Num );

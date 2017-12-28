@@ -3,6 +3,7 @@
 #ifndef AFFINE_TRANSFORM_H
 #define AFFINE_TRANSFORM_H
 
+#include "Vector3D.h"
 
 Matrix<> Translation( double x, double y )
 {
@@ -11,6 +12,30 @@ Matrix<> Translation( double x, double y )
 		0, 1, y,
 		0, 0, 1 };
 	return Matrix<>( 3, 3, T );
+}
+
+Matrix<> Translation( double x, double y, double z )
+{
+	double T [ 16 ] = {
+		1, 0, 0, x,
+		0, 1, 0, y,
+		0, 0, 1, z,
+		0, 0, 0, 1
+	};
+
+	return Matrix<>( 4, 4, T );
+}
+
+Matrix<> Translation( Vector3D V )
+{
+	double T [ 16 ] = {
+		1, 0, 0, V.X,
+		0, 1, 0, V.Y,
+		0, 0, 1, V.Z,
+		0, 0, 0, 1
+	};
+
+	return Matrix<>( 4, 4, T );
 }
 
 Matrix<> Identity()
@@ -22,6 +47,18 @@ Matrix<> Identity()
 	};
 
 	return Matrix<>( 3, 3, T );
+}
+
+Matrix<> Identity3D()
+{
+	double T [ 16 ] = {
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	};
+
+	return Matrix<>( 4, 4, T );
 }
 
 Matrix<> Rotation( double X )
@@ -48,6 +85,42 @@ Matrix<> Rotation( double C, double S )
 	return Matrix<>( 3, 3, T );
 }
 
+Matrix<> RotationX( double t )
+{
+	double T [ 16 ] = {
+		1, 0, 0, 0,
+		0, cos( t ), -sin( t ), 0,
+		0, sin( t ), cos( t ), 0,
+		0, 0, 0, 1
+	};
+
+	return Matrix<>( 4, 4, T );
+}
+
+Matrix<> RotationY( double t )
+{
+	double T [ 16 ] = {
+		cos( t ), 0, sin( t ), 0,
+		0, 1, 0, 0,
+		-sin( t ), 0, cos( t ), 0,
+		0, 0, 0, 1
+	};
+
+	return Matrix<>( 4, 4, T );
+}
+
+Matrix<> RotationZ( double t )
+{
+	double T [ 16 ] = {
+		cos( t ), -sin( t ), 0, 0,
+		sin( t ), cos( t ), 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	};
+
+	return Matrix<>( 4, 4, T );
+}
+
 Matrix<> Scailing( double Kx, double Ky )
 {
 	double T [ 9 ] = {
@@ -57,6 +130,18 @@ Matrix<> Scailing( double Kx, double Ky )
 	};
 
 	return Matrix<>( 3, 3, T );
+}
+
+Matrix<> Scailing( double Kx, double Ky, double Kz )
+{
+	double T [ 16 ] = {
+		Kx, 0, 0, 0,
+		0, Ky, 0, 0,
+		0, 0, Kz, 0,
+		0, 0, 0, 1
+	};
+
+	return Matrix<>( 4, 4, T );
 }
 
 Matrix<> Mapping( bool isXAxis )
@@ -87,16 +172,5 @@ Matrix<> MapAroundLine( float FirstX, float FirstY, float SecondX, float SecondY
 		Translation( -FirstX, -FirstY );
 		*/
 }
-// Здесь требуется реализовать функции, возвращающие матрицы базовых АП:
-// Identity() - тождественное АП;
-// Rotation(t) - поворот на угол t;
-// Rotation(c, s) - поворот на угол, косинус и синус которого пропорциональны величинам c и s;
-// Scaling(kx, ky) - масштабирование;
-// Mapping (различные виды отражений) - по желанию, для создания матриц отражения можно использовать функцию Scaling.
-
-// В приведённом примере используется конструктор матрицы из списка.
-// Приветствуются идеи о других способах создания матриц.
-// Например, вызов функции, создающей единичную матрицу,
-// с последующим переопределением некоторых её коэффициентов.
 
 #endif AFFINE_TRANSFORM_H

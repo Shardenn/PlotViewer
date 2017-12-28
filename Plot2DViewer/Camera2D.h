@@ -66,14 +66,13 @@ public:
 
 	void MoveTo( double X, double Y )
 	{
-		posX = WorldToScreenX( X ); // Переводить X и Y из эллиптических в декартовы
+		posX = WorldToScreenX( X );
 		posY = WorldToScreenY( Y );
 	}
 
-	// Переводить X и Y из эллиптических в декартовы
 	void LineTo( HDC dc, double X, double Y )
 	{
-		MoveToEx( dc, posX, posY, NULL );
+		::MoveToEx( dc, posX, posY, nullptr );
 		MoveTo( X, Y );
 
 		::LineTo( dc, posX, posY );

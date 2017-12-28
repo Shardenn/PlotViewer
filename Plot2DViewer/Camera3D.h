@@ -67,16 +67,17 @@ void Camera3D::UpdateCamera()
 
 	double a [ ] = { i.X, i.Y, i.Z, -( i.X * Ov.X + i.Y * Ov.Y + i.Z * Ov.Z ),
 					j.X, j.Y, j.Z, -( j.X * Ov.X + j.Y * Ov.Y + j.Z * Ov.Z ),
-					k.X, k.Y, k.Z, -( k.X * Ov.X + k.Y * Ov.Y + k.Z * Ov.Z )
+					k.X, k.Y, k.Z, -( k.X * Ov.X + k.Y * Ov.Y + k.Z * Ov.Z ),
+					0, 0, 0, 1
 	};
 
 	WorldToView = Matrix<>( 4, 4, a );
 
 	double b [ ] = { 1,0,0,0,
 					0,1,0,0,
-					0,0,-( 1 / D ),1 };
+					0,0,(-1/D ),1 };
 
-	ViewToProject = Matrix<>( 4, 4, b );
+	ViewToProject = Matrix<>( 3, 4, b );
 
 	WorldToProject = ViewToProject * WorldToView;
 }
