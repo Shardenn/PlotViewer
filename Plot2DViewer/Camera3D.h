@@ -10,6 +10,7 @@ private :
 	Vector3D Ov, Top, N;
 	double D;
 
+	bool bIsRotating;
 	bool bIsMoving;
 
 	Matrix<> WorldToView;
@@ -20,7 +21,7 @@ public:
 
 	Camera3D( double L, double R, double B, double T ) : 
 		Camera2D( L, R, B, T ), 
-		bIsMoving( false )
+		bIsRotating( false )
 	{
 		SetOv( Vector3D( 0, 0, 0 ) );
 		SetTop( Vector3D( 0, 1, 0 ) );
@@ -33,20 +34,24 @@ public:
 	void				SetTop	( Vector3D VectorToSet );
 	void				SetN	( Vector3D VectorN );
 	void				SetD	( double newD );
+	void				SetIsRotating( bool bSet );
 	void				SetIsMoving( bool bSet );
 
 	void				UpdateCamera();
 	
+	bool				IsRotating()							{ return bIsRotating; }
 	bool				IsMoving()								{ return bIsMoving; }
 	Vector3D			GetTop()								{ return Top; }
-	double				GetD()									{ return D; }
 	Vector3D			GetN()									{ return N; }
+	Vector3D			GetOv()									{ return Ov; }
+	double				GetD()									{ return D; }
 
 	Matrix<>			GetWorldToProject()						{ return WorldToProject; }
 
-	const double RotationAngleX = 0.01;
-	const double RotationAngleY = 0.01;
-	const double ZoomingRate	= 0.01;
+	const double RotationAngleX = 0.02;
+	const double RotationAngleY = 0.02;
+	const double MovingSpeed	= 0.5;
+	const double ZoomingRate	= 0.1;
 };
 
 void Camera3D::SetOv( Vector3D newVector )
@@ -67,6 +72,11 @@ void Camera3D::SetN( Vector3D newVector )
 void Camera3D::SetD( double newD )
 {
 	D = newD;
+}
+
+void Camera3D::SetIsRotating( bool bSet )
+{
+	bIsRotating = bSet;
 }
 
 void Camera3D::SetIsMoving( bool bSet )

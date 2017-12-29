@@ -8,25 +8,25 @@ class Camera2D
 
 protected:
 	double L, R, B, T;					// ћировые координаты границ рабочей области окна
-	
+
 	int W, H;							// –азрешение рабочей области окна
-	
+
 	int WorldToScreenX( double X )
 	{
-		return ( X - L ) / ( R - L ) * W;
+		return ( int ) ( ( X - L ) / ( R - L ) * W );
 	}
-	
+
 	int WorldToScreenY( double Y )
 	{
-		return ( T - Y ) / ( T - B ) * H;
+		return ( int ) ( ( T - Y ) / ( T - B ) * H );
 	}
-	
+
 	double ScreenToWorldX( int X )
 	{
 		return L + ( R - L ) * ( X + 0.5 ) / W;
 	}
-	
-	double ScreenToWorldY( int Y )	
+
+	double ScreenToWorldY( int Y )
 	{
 		return T - ( T - B ) * ( Y + 0.5 ) / H;
 	}
@@ -56,10 +56,10 @@ public:
 
 		W = rectangle.right - rectangle.left + 1;
 		H = rectangle.bottom - rectangle.top + 1;
-		
+
 		double newL = ( L + R ) / 2 - ( T - B ) / 2 * W / H;
 		double newR = ( L + R ) / 2 + ( T - B ) / 2 * W / H;
-		
+
 		L = newL;
 		R = newR;
 	}
@@ -83,7 +83,7 @@ public:
 		MoveTo( L, 0.0 );
 		LineTo( dc, R, 0.0 );
 
-		MoveTo( 0.0 , T );
+		MoveTo( 0.0, T );
 		LineTo( dc, 0.0, B );
 	}
 
@@ -91,17 +91,17 @@ public:
 	{
 		prevMouseX = X;
 		prevMouseY = Y;
-		
+
 		bDragging = true;
 	}
 
 	void Drag( int X, int Y )
 	{
-		L -= ( ScreenToWorldX( X ) - ScreenToWorldX( prevMouseX ) );
-		R -= ( ScreenToWorldX( X ) - ScreenToWorldX( prevMouseX ) );
+		L -= ( int ) ( ScreenToWorldX( X ) - ScreenToWorldX( prevMouseX ) );
+		R -= ( int ) ( ScreenToWorldX( X ) - ScreenToWorldX( prevMouseX ) );
 
-		B -= ( ScreenToWorldY( Y ) - ScreenToWorldY( prevMouseY ) );
-		T -= ( ScreenToWorldY( Y ) - ScreenToWorldY( prevMouseY ) );
+		B -= ( int ) ( ScreenToWorldY( Y ) - ScreenToWorldY( prevMouseY ) );
+		T -= ( int ) ( ScreenToWorldY( Y ) - ScreenToWorldY( prevMouseY ) );
 
 		prevMouseX = X;
 		prevMouseY = Y;
@@ -117,10 +117,10 @@ public:
 		bDragging = false;
 	}
 
-	void Scale( POINT MousePosition, float Koeff)
+	void Scale( POINT MousePosition, float Koeff )
 	{
 		Koeff = Koeff > 0 ? 1.1 : 0.9;
-		
+
 		double Xw = ScreenToWorldX( MousePosition.x );
 		double Yw = ScreenToWorldY( MousePosition.y );
 

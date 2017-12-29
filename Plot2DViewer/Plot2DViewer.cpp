@@ -12,11 +12,9 @@
 #include "Scene3D.h"
 #include "Matrix.h"
 #include "AffineTransform.h"
-#include "Model2D.h"
-#include "Model3D.h"
 
-LRESULT _stdcall WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);						// прототип оконной процедуры
-int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)		// основна€ процедура
+LRESULT _stdcall WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );						// прототип оконной процедуры
+int _stdcall WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )		// основна€ процедура
 {
 	// ѕерва€ составл€юща€ часть основной процедуры - создание окна: сначала описываетс€ оконный класс wc, затем создаЄтс€ окно hWnd
 	WNDCLASS wc;
@@ -28,25 +26,25 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	wc.hIcon = LoadIcon( nullptr, IDI_APPLICATION );
 	wc.hCursor = LoadCursor( nullptr, IDC_ARROW );
 	wc.hbrBackground = ( HBRUSH ) ( 6 );
-	wc.lpszMenuName = 0;							// меню в оконном классе отсутствует
+	wc.lpszMenuName = nullptr;							// меню в оконном классе отсутствует
 	wc.lpszClassName = ( LPCSTR )"MainWindowClass"; // им€ оконного класса, используемое при создании экземпл€ров окна
 	RegisterClass( &wc );					        // регистраци€ класса wc
 
 	HWND hWnd = CreateWindow
 	(												// hWnd - дескриптор, идентифицирующий окно; функци€ создани€ окна заполн€ет дескриптор hWnd ненулевым значением
-		(LPCSTR)"MainWindowClass",					// им€ оконного класса
-		(LPCSTR)"Plot2D Viewer",					// заголовок окна
-		WS_OVERLAPPEDWINDOW,						// стиль окна
-		300,100,800,600,							// координаты на экране левого верхнего угла окна, его ширина и высота
-		nullptr,nullptr,hInstance,nullptr
+		( LPCSTR )"MainWindowClass",					// им€ оконного класса
+	  ( LPCSTR )"Plot2D Viewer",					// заголовок окна
+	  WS_OVERLAPPEDWINDOW,						// стиль окна
+	  300, 100, 800, 600,							// координаты на экране левого верхнего угла окна, его ширина и высота
+	  nullptr, nullptr, hInstance, nullptr
 	);
 
-	ShowWindow(hWnd,nCmdShow);
-	UpdateWindow(hWnd);
+	ShowWindow( hWnd, nCmdShow );
+	UpdateWindow( hWnd );
 
 	// ¬тора€ составл€юща€ часть основной процедуры - основной цикл обработки системных сообщений, который ожидает сообщени€ и рассылает их соответствующим окнам
 	MSG msg;
-	while ( GetMessage( &msg, nullptr, 0, 0 ) )				// функци€ GetMessage выбирает из очереди сообщение и заносит его в структуру msg
+	while( GetMessage( &msg, nullptr, 0, 0 ) )				// функци€ GetMessage выбирает из очереди сообщение и заносит его в структуру msg
 	{
 		TranslateMessage( &msg );
 		DispatchMessage( &msg ); 					// функци€ DispatchMessage оповещает систему о необходимости вызова оконной процедуры
@@ -55,32 +53,31 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	return 0;
 }
 
-Model3D SpaceModel( "vertices3d.txt", "faces.txt" );
-Scene3D SpaceScene( L, R, B, T, SpaceModel );
+float TranslationSpeed = 0.5f;
+float RotationSpeed = 1.f;
+float ScailingSpeed = 1.f;
 
-float TranslationSpeed	= 0.5f;
-float RotationSpeed		= 1.f;
-float ScailingSpeed		= 1.f;
-float ZoomingSpeed		= 0.1f;
-
-int FirstLinePoint		= 8;
-int SecondLinePoint		= 9;
+int FirstLinePoint = 8;
+int SecondLinePoint = 9;
 
 double MouseCoordX, MouseCoordY;
 
+Model3D SpaceModel( "vertices3d.txt", "faces.txt" );
+set<Model3D> ModelsToCreate = { SpaceModel };
+Scene3D SpaceScene( L, R, B, T, ModelsToCreate );
 
-
-LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT _stdcall WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
+	//Model3D AxesModel( "AxesVertices.txt", "AxesFaces.txt" );
 	switch( msg )
 	{
 		case WM_PAINT:
 		{
 			HDC dc = GetDC( hWnd );
 			SpaceScene.Clear( dc );
-			SpaceScene.Render( dc, false );
+			SpaceScene.RenderAll( dc );
 
-			ReleaseDC( hWnd,dc );
+			ReleaseDC( hWnd, dc );
 			return DefWindowProc( hWnd, msg, wParam, lParam );
 		}
 
@@ -89,65 +86,65 @@ LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			HDC dc = GetDC( hWnd );
 			SpaceScene.SetResolution( dc );
 			ReleaseDC( hWnd, dc );
-			InvalidateRect(hWnd,nullptr,false);
+			InvalidateRect( hWnd, nullptr, false );
 			return 0;
 		}
-		
-		case WM_LBUTTONDOWN :
+
+		case WM_LBUTTONDOWN:
 		{
 			SpaceScene.GetModel()->StopAllActions();
 		}
 
-		case WM_KEYDOWN :
+		case WM_KEYDOWN:
 		{
-			switch ( wParam )
+			switch( wParam )
 			{
 				case 0x51: // Q turn left
 				{
-					//Scene.GetModel()->Apply( Rotation( RotationSpeed * M_PI / 60.0 ) );
+
 					break;
 				}
-				case 0x45 :
+				case 0x45:
 				{
-					//Scene.GetModel()->Apply( Rotation( RotationSpeed * ( -M_PI ) / 60.0 ) );
+
 					break;
 				}
-				case 0x41 : // A move left
+				case 0x41: // A move left
 				{
-					//Scene.GetModel()->Apply( Translation( -TranslationSpeed, 0 ) );
+
 					break;
 				}
-				case 0x44 : // D move right
+				case 0x44: // D move right
 				{
-					//Scene.GetModel()->Apply( Translation( TranslationSpeed, 0 ) );
+
 					break;
 				}
-				case 0x57 : // W move up
+				case 0x57: // W move up
 				{
-					//Scene.GetModel()->Apply( Translation( 0, TranslationSpeed ) );
+
 					break;
 				}
-				case 0x53 : // S move down
+				case 0x53: // S move down
 				{
-					//Scene.GetModel()->Apply( Translation( 0, -TranslationSpeed ) );
+
 					break;
 				}
-				case 0x5A : // Z scale up
+				case 0x5A: // Z scale up
 				{
-					//Scene.GetModel()->Apply( Scailing( ScailingSpeed * 1.1, ScailingSpeed * 1.1 ) );
+
 					break;
 				}
-				case 0x58 : // X scale down
+				case 0x58: // X scale down
 				{
-					//Scene.GetModel()->Apply( Scailing( ScailingSpeed * 0.9, ScailingSpeed * 0.9 ) );
+
 					break;
 				}
-				case 0x46 : // F map X
+				case 0x46: // F map X
 				{
-					//Scene.GetModel()->Apply( Mapping( true ) );
+
 					break;
 				}
-				case 0x47 : // G start dragging
+				case 0x47: // G start dragging
 				{
 					MouseCoordX = GET_X_LPARAM( lParam );
 					MouseCoordY = GET_Y_LPARAM( lParam );
@@ -156,33 +153,18 @@ LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 					break;
 				}
-				case 0x52 : // R scale up around vertex
+				case 0x52: // R scale up around vertex
 				{
-					//float CoordX = Scene.GetModel()->GetVertexX( PointToRotateAround );
-					//float CoordY = Scene.GetModel()->GetVertexY( PointToRotateAround );
-
-					//Scene.GetModel()->Apply( ScaleAroundPoint( CoordX, CoordY, ScailingSpeed, true ) );
 
 					break;
 				}
-				case 0x54 : // T scale down around vertex
+				case 0x54: // T scale down around vertex
 				{
-					//float CoordX = Scene.GetModel()->GetVertexX( PointToRotateAround );
-					//float CoordY = Scene.GetModel()->GetVertexY( PointToRotateAround );
-					
-					//Scene.GetModel()->Apply( ScaleAroundPoint( CoordX, CoordY, ScailingSpeed, false ) );
 
 					break;
 				}
-				case 0x43 : // C to map around line
+				case 0x43: // C to map around line
 				{
-					//float FirstX = Scene.GetModel()->GetVertexX( FirstLinePoint );
-					//float FirstY = Scene.GetModel()->GetVertexY( FirstLinePoint );
-
-					//float SecondX = Scene.GetModel()->GetVertexX( SecondLinePoint );
-					//float SecondY = Scene.GetModel()->GetVertexY( SecondLinePoint );
-
-					//Scene.GetModel()->Apply( MapAroundLine( FirstX, FirstY, SecondX, SecondY ) );
 
 					break;
 				}
@@ -192,76 +174,80 @@ LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 
-		case WM_MOUSEWHEEL : // Wheel rotate
+		case WM_MOUSEWHEEL: // Wheel rotate
 		{
-			SpaceScene.SetD( SpaceScene.GetD() + GET_WHEEL_DELTA_WPARAM( wParam ) * ZoomingSpeed );
-
+			SpaceScene.ZoomScene( GET_WHEEL_DELTA_WPARAM( wParam ) );
+	
 			InvalidateRect( hWnd, nullptr, false );
 
 			return 0;
 		}
 
-		case WM_MOUSEMOVE :
+		case WM_MOUSEMOVE:
 		{
+			double dx = GET_X_LPARAM( lParam ) - MouseCoordX;
+			double dy = GET_Y_LPARAM( lParam ) - MouseCoordY;
+
 			if( SpaceScene.GetModel()->isDragged() )
 			{
-				double dx = GET_X_LPARAM( lParam ) - MouseCoordX;
-				double dy = GET_Y_LPARAM( lParam ) - MouseCoordY;
-
 				Vector3D MoveVector( dx, dy, 0 );
 				MoveVector.Normalize();
 				MoveVector.Y = -MoveVector.Y;
 				MoveVector = MoveVector * TranslationSpeed;
 
 				SpaceScene.GetModel()->Apply( Translation( MoveVector ) );
-
-				MouseCoordX = GET_X_LPARAM( lParam );
-				MouseCoordY = GET_Y_LPARAM( lParam );
-				
-				InvalidateRect( hWnd, nullptr, false );
 			}
-			else if ( SpaceScene.IsMoving() )
+			if( SpaceScene.IsRotating() ) // Mouse wheel is pushed => rotate scene
 			{
-				double dx = GET_X_LPARAM( lParam ) - MouseCoordX; // Horizontal mouse movement
-				double dy = GET_Y_LPARAM( lParam ) - MouseCoordY; // Vertical mouse movement
-
 				SpaceScene.RotateScene( dx, dy );
-
-				MouseCoordX = GET_X_LPARAM( lParam );
-				MouseCoordY = GET_Y_LPARAM( lParam );
-				
-				InvalidateRect( hWnd, nullptr, false );
 			}
-
-			return 0;
-		}
-
-		case WM_MBUTTONDOWN : // Wheel push
-		{
-			SpaceScene.SetIsMoving( true );
+			else if( SpaceScene.IsMoving() )
+			{
+				SpaceScene.MoveScene( dx, dy );
+			}
 
 			MouseCoordX = GET_X_LPARAM( lParam );
 			MouseCoordY = GET_Y_LPARAM( lParam );
-			
+
+			InvalidateRect( hWnd, nullptr, false );
+
 			return 0;
 		}
 
-		case WM_MBUTTONUP :
+		case WM_MBUTTONDOWN: // Wheel push
 		{
+			MouseCoordX = GET_X_LPARAM( lParam );
+			MouseCoordY = GET_Y_LPARAM( lParam );
+
+			if( GetAsyncKeyState( VK_SHIFT ) )
+			{
+				SpaceScene.SetIsMoving( true );
+			}
+			else
+			{
+				SpaceScene.SetIsRotating( true );
+			}
+
+			return 0;
+		}
+
+		case WM_MBUTTONUP:
+		{
+			SpaceScene.SetIsRotating( false );
 			SpaceScene.SetIsMoving( false );
-			
+
 			return 0;
 		}
 
 		case WM_DESTROY:
 		{
-			PostQuitMessage(0);
+			PostQuitMessage( 0 );
 			return 0;
 		}
 
 		default:
 		{
-			return DefWindowProc(hWnd,msg,wParam,lParam);
+			return DefWindowProc( hWnd, msg, wParam, lParam );
 		}
 	}
 	return 0;

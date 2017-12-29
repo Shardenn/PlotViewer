@@ -1,6 +1,4 @@
 ﻿  Plot2DViewer.cpp
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\camera2d.h(16): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\camera2d.h(21): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\camera2d.h(75): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\camera2d.h(78): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\camera2d.h(100): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
@@ -11,12 +9,10 @@ c:\users\андрей\documents\компьютерная графика\plot2dvi
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\vector3d.h(40): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\vector3d.h(98): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\affinetransform.h(170): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(38): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(39): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(44): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(73): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(74): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(76): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(77): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\affinetransform.h(166): warning C4715: 'Mapping': not all control paths return a value
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(37): warning C4715: 'Scene3D::GetModel': not all control paths return a value
+c:\users\андрей\documents\компьютерная графика\plot2dviewer - first method\plot2dviewer\scene3d.h(36): warning C4172: returning address of local variable or temporary: Model
   Plot2DViewer.vcxproj -> C:\Users\Андрей\Documents\Компьютерная графика\Plot2DViewer - First Method\Debug\Plot2DViewer.exe

@@ -76,7 +76,7 @@ public:
 
 	Vector3D operator / ( float Scale )
 	{
-		if ( Scale == 0 )
+		if( Scale == 0 )
 			return *this;
 
 		Scale = 1.f / Scale;
@@ -102,11 +102,25 @@ public:
 	{
 		const float fLength = Length();
 
-		if ( fLength == 0 )
+		if( fLength == 0 )
 			return;
 
 		X /= fLength;
 		Y /= fLength;
 		Z /= fLength;
 	}
+
+	static void NormalizeVector2D( double &X, double &Y )
+	{
+		if( abs( X ) < std::numeric_limits<double>::epsilon() && abs( Y ) < std::numeric_limits<double>::epsilon() )
+			return;
+
+		double BufX = X;
+		double BufY = Y;
+		double mSquareRoot = sqrt( BufX * BufX + BufY * BufY );
+
+		X /= mSquareRoot;
+		Y /= mSquareRoot;
+	}
+
 };

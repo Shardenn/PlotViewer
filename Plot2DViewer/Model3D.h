@@ -58,6 +58,8 @@ public:
 		SetEdges();
 	}
 
+	bool operator<( const Model3D & other ) const;
+
 	bool isDragged()									{ return bIsDragging; }
 	void SetDragged( bool NewDragged )					{ bIsDragging = NewDragged; }
 
@@ -84,6 +86,11 @@ public:
 	void Apply( Matrix<> );
 	void Project( Matrix <> );
 };
+
+bool Model3D::operator < ( const Model3D & other ) const
+{
+	return true;
+}
 
 double Model3D::GetVertexX( int Num )
 {
@@ -136,7 +143,8 @@ void Model3D::SetEdges()
 	}
 
 	int i = 1;
-	m_Edges = Matrix<int>( EdgesSet.size(), 2 );
+	Matrix<int> EdgesToSet( EdgesSet.size(), 2 );
+	m_Edges = EdgesToSet;
 
 	for ( auto PairIter : EdgesSet )
 	{
