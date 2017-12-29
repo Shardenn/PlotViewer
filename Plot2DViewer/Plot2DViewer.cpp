@@ -14,6 +14,7 @@
 #include "AffineTransform.h"
 #include "Model2D.h"
 #include "Model3D.h"
+
 LRESULT _stdcall WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);						// прототип оконной процедуры
 int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)		// основная процедура
 {
@@ -57,15 +58,17 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 Model3D SpaceModel( "vertices3d.txt", "faces.txt" );
 Scene3D SpaceScene( L, R, B, T, SpaceModel );
 
-float TranslationSpeed	= 0.1f;
+float TranslationSpeed	= 0.5f;
 float RotationSpeed		= 1.f;
 float ScailingSpeed		= 1.f;
-int PointToRotateAround = 4;
+float ZoomingSpeed		= 0.1f;
 
 int FirstLinePoint		= 8;
 int SecondLinePoint		= 9;
 
 double MouseCoordX, MouseCoordY;
+
+
 
 LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -189,17 +192,10 @@ LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 
-		case WM_MOUSEWHEEL :
+		case WM_MOUSEWHEEL : // Wheel rotate
 		{
-			POINT MousePosition;
+			SpaceScene.SetD( SpaceScene.GetD() + GET_WHEEL_DELTA_WPARAM( wParam ) * ZoomingSpeed );
 
-			MousePosition.x = GET_X_LPARAM( lParam );
-			MousePosition.y = GET_Y_LPARAM( lParam );
-
-			ScreenToClient( hWnd, &MousePosition );
-
-			//Scene.Scale( MousePosition, GET_WHEEL_DELTA_WPARAM( wParam ) );
-			
 			InvalidateRect( hWnd, nullptr, false );
 
 			return 0;
@@ -219,13 +215,41 @@ LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 				SpaceScene.GetModel()->Apply( Translation( MoveVector ) );
 
+				MouseCoordX = GET_X_LPARAM( lParam );
+				MouseCoordY = GET_Y_LPARAM( lParam );
 				
+				InvalidateRect( hWnd, nullptr, false );
+			}
+			else if ( SpaceScene.IsMoving() )
+			{
+				double dx = GET_X_LPARAM( lParam ) - MouseCoordX; // Horizontal mouse movement
+				double dy = GET_Y_LPARAM( lParam ) - MouseCoordY; // Vertical mouse movement
+
+				SpaceScene.RotateScene( dx, dy );
 
 				MouseCoordX = GET_X_LPARAM( lParam );
 				MouseCoordY = GET_Y_LPARAM( lParam );
 				
 				InvalidateRect( hWnd, nullptr, false );
 			}
+
+			return 0;
+		}
+
+		case WM_MBUTTONDOWN : // Wheel push
+		{
+			SpaceScene.SetIsMoving( true );
+
+			MouseCoordX = GET_X_LPARAM( lParam );
+			MouseCoordY = GET_Y_LPARAM( lParam );
+			
+			return 0;
+		}
+
+		case WM_MBUTTONUP :
+		{
+			SpaceScene.SetIsMoving( false );
+			
 			return 0;
 		}
 

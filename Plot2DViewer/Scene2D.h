@@ -55,24 +55,6 @@ public:
 			LineTo( dc, x, f( x ) );
 		}
 	}
-	/*
-	void ParametricPlot( HDC dc, Func f, bool axes = true )
-	{
-		if ( axes )
-			Axes( dc );
-
-		double step = 2.0 * ( R - L ) / W;
-
-		MoveTo( FromEllipticX( t_min ), FromEllipticY( t_min ) );
-
-		for ( double t = t_min; t < t_max; t += step )
-		{
-			LineTo( dc, FromEllipticX( t ), FromEllipticY( t ) );
-		}
-
-		LineTo( dc, FromEllipticX( t_max ), FromEllipticY( t_max ) );
-	}
-	*/
 };
 
 #endif SCENE_2D_H

@@ -78,7 +78,7 @@ public:
 		::LineTo( dc, posX, posY );
 	}
 
-	void Axes( HDC dc )
+	virtual void Axes( HDC dc )
 	{
 		MoveTo( L, 0.0 );
 		LineTo( dc, R, 0.0 );

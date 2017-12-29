@@ -121,6 +121,21 @@ Matrix<> RotationZ( double t )
 	return Matrix<>( 4, 4, T );
 }
 
+Matrix<> RotationAroundVector( Vector3D U, float Angle )
+{
+	float C = cos( Angle );
+	float S = sqrt( 1 - C * C );
+	float OneC = 1 - C;
+
+	double T [ ] = {
+		C + U.X * U.X * OneC , U.X * U.Y * OneC - U.Z * S , U.X * U.Z * OneC + U.Y * S,
+		U.Y * U.X  * OneC + U.Z * S, C + U.Y * U.Y * OneC, U.Y * U.Z * OneC - U.X * S,
+		U.Z * U.X * OneC - U.Y * S, U.Z * U.Y * OneC + U.X * S, C + U.Z * U.Z * OneC
+	};
+
+	return Matrix<>( 3, 3, T );
+}
+
 Matrix<> Scailing( double Kx, double Ky )
 {
 	double T [ 9 ] = {

@@ -4,6 +4,7 @@
 #define MATRIX_H
 
 #include <iostream>
+#include "Vector3D.h"
 
 using namespace std;
 
@@ -55,6 +56,7 @@ public:
 				Matrix  operator + ( const Matrix& );		// Сложение матриц
 				Matrix  operator - ( const Matrix& );		// Вычитание матриц
 				Matrix  operator * ( const Matrix& );		// Умножение матриц
+				Vector3D  operator * ( const Vector3D& );
 
 				friend istream& operator >> <> ( istream&, Matrix& );			// Перегрузка оператора >> для ввода матрицы
 				friend ostream& operator << <> ( ostream&, const Matrix& );	// Перегрузка оператора << для вывода матрицы
@@ -155,6 +157,19 @@ Matrix<Cell> Matrix<Cell>::operator*( const Matrix& M )
 		for ( int j = 0; j < M.m_Columns; j++ )
 			for ( int l = 0; l < m_Columns; l++ )
 				Result.m_cells [ i ] [ j ] += m_cells [ i ] [ l ] * M.m_cells [ l ] [ j ];
+
+	return Result;
+}
+
+template<typename Cell>
+inline Vector3D Matrix<Cell>::operator*( const Vector3D & other )
+{
+	if ( m_Columns != 3 || m_Rows != 3 )
+		return Vector3D( 0 );
+
+	Vector3D Result( m_cells [ 0 ] [ 0 ] * other.X + m_cells [ 0 ] [ 1 ] * other.Y + m_cells [ 0 ] [ 2 ] * other.Z,
+					 m_cells [ 1 ] [ 0 ] * other.X + m_cells [ 1 ] [ 1 ] * other.Y + m_cells [ 1 ] [ 2 ] * other.Z,
+					 m_cells [ 2 ] [ 0 ] * other.X + m_cells [ 2 ] [ 1 ] * other.Y + m_cells [ 2 ] [ 2 ] * other.Z );
 
 	return Result;
 }
