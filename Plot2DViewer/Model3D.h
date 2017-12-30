@@ -15,7 +15,7 @@ private:
 	int			m_FacesCount;
 	Matrix<>	m_CumulativeAT;
 
-	bool bIsDragging = false;
+	bool bIsDragged = false;
 	bool bIsRotated = false;
 	bool bIsScaled = false;
 
@@ -60,17 +60,17 @@ public:
 
 	bool operator<( const Model3D & other ) const;
 
-	bool isDragged()									{ return bIsDragging; }
-	void SetDragged( bool NewDragged )					{ bIsDragging = NewDragged; }
+	bool isDragged()									{ return bIsDragged; }
+	void SetDragged( bool NewDragged )					{ bIsDragged = NewDragged; }
 
 	void StopAllActions()
 	{
-		bIsDragging = false;
+		bIsDragged = false;
 		bIsRotated = false;
 		bIsScaled = false;
 	}
 
-	Matrix<> GetVertices() { return m_Vertices; }
+	Matrix<> GetVertices() const { return m_Vertices; }
 	Matrix<int> GetEdges() { return m_Edges; }
 	Matrix<int> GetFaces() { return m_Faces; }
 	Matrix<> GetProjectedVertices()						{ return m_ProjectedVertices; }

@@ -33,7 +33,9 @@ public:
 	Model3D * GetModel()
 	{
 		for( auto Model : m_Models )
+		{
 			return &Model;
+		}
 	}
 };
 
@@ -63,9 +65,9 @@ void Scene3D::RenderAll( HDC dc )
 
 void Scene3D::RotateScene( double dX, double dY )
 {
-	Vector3D::NormalizeVector2D( dX, dY );
+	if( !Vector3D::NormalizeVector2D( dX, dY ) )
+		return;
 
-	Matrix<> NewNMatrix;
 	Vector3D NewN;
 	Vector3D NewTop;
 	Vector3D VectorToRotateAround = GetTop() ^ GetN();
@@ -84,14 +86,21 @@ void Scene3D::RotateScene( double dX, double dY )
 
 void Scene3D::MoveScene( double dX, double dY )
 {
-	Vector3D::NormalizeVector2D( dX, dY );
+	if( !Vector3D::NormalizeVector2D( dX, dY ) )
+		return;
+	
+	double phiX = Vector3D::CosBetween( Vector3D( 1, 0, 0 ), Vector3D( dX, -dY, 0 ) );
+	double phiY = Vector3D::CosBetween( Vector3D( 0, 1, 0 ), Vector3D( dX, -dY, 0 ) );
 
-	dX *= -MovingSpeed;
-	dY *= MovingSpeed;
+	Vector3D RightVector = GetTop() ^ GetN();
 
-	Vector3D NewOv( GetOv().X + dX, GetOv().Y + dY, 0 );
+	Vector3D SideMovement = RightVector / phiX;
+	Vector3D VerticalMovement = GetTop() / phiY;
 
-	SetOv( NewOv );
+	SideMovement.Normalize();
+	VerticalMovement.Normalize();
+
+	SetOv( GetOv() - ( SideMovement * abs( dX ) + VerticalMovement * abs( dY ) ) * MovingSpeed );
 }
 
 void Scene3D::ZoomScene( int WheelDelta )

@@ -35,7 +35,7 @@ int _stdcall WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		( LPCSTR )"MainWindowClass",					// имя оконного класса
 	  ( LPCSTR )"Plot2D Viewer",					// заголовок окна
 	  WS_OVERLAPPEDWINDOW,						// стиль окна
-	  300, 100, 800, 600,							// координаты на экране левого верхнего угла окна, его ширина и высота
+	  100, 50, 1000, 700,							// координаты на экране левого верхнего угла окна, его ширина и высота
 	  nullptr, nullptr, hInstance, nullptr
 	);
 

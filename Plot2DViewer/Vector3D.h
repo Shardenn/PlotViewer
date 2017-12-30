@@ -77,7 +77,7 @@ public:
 	Vector3D operator / ( float Scale )
 	{
 		if( Scale == 0 )
-			return *this;
+			return Vector3D( 0, 0, 0 );
 
 		Scale = 1.f / Scale;
 		return Vector3D( X * Scale, Y * Scale, Z * Scale );
@@ -110,10 +110,10 @@ public:
 		Z /= fLength;
 	}
 
-	static void NormalizeVector2D( double &X, double &Y )
+	static bool NormalizeVector2D( double &X, double &Y )
 	{
 		if( abs( X ) < std::numeric_limits<double>::epsilon() && abs( Y ) < std::numeric_limits<double>::epsilon() )
-			return;
+			return false;
 
 		double BufX = X;
 		double BufY = Y;
@@ -121,6 +121,18 @@ public:
 
 		X /= mSquareRoot;
 		Y /= mSquareRoot;
+
+		return true;
+	}
+
+	static double DotProduct( Vector3D A, Vector3D B )
+	{
+		return ( A.X * B.X + A.Y * B.Y + A.Z * B.Z );
+	}
+
+	static double CosBetween( Vector3D A, Vector3D B )
+	{
+		return ( A | B ) / ( A.Length() * B.Length() );
 	}
 
 };

@@ -48,10 +48,10 @@ public:
 
 	Matrix<>			GetWorldToProject()						{ return WorldToProject; }
 
-	const double RotationAngleX = 0.02;
-	const double RotationAngleY = 0.02;
-	const double MovingSpeed	= 0.5;
-	const double ZoomingRate	= 0.1;
+	const double RotationAngleX = 0.04;
+	const double RotationAngleY = 0.04;
+	const double MovingSpeed	= 0.35;
+	const double ZoomingRate	= 0.5;
 };
 
 void Camera3D::SetOv( Vector3D newVector )
