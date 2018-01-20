@@ -63,8 +63,8 @@ int SecondLinePoint = 9;
 double MouseCoordX, MouseCoordY;
 
 Model3D SpaceModel( "vertices3d.txt", "faces.txt" );
-set<Model3D> ModelsToCreate = { SpaceModel };
-Scene3D SpaceScene( L, R, B, T, ModelsToCreate );
+Model3D ModelsToCreate [] = { SpaceModel };
+Scene3D SpaceScene( L, R, B, T, ModelsToCreate, 1 );
 
 LRESULT _stdcall WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
@@ -74,8 +74,10 @@ LRESULT _stdcall WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 		case WM_PAINT:
 		{
 			HDC dc = GetDC( hWnd );
+
 			SpaceScene.Clear( dc );
-			SpaceScene.RenderAll( dc );
+			//SpaceScene.RenderAll( dc );
+			SpaceScene.Render( dc );
 
 			ReleaseDC( hWnd, dc );
 			return DefWindowProc( hWnd, msg, wParam, lParam );
@@ -94,68 +96,26 @@ LRESULT _stdcall WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 		{
 			SpaceScene.GetModel()->StopAllActions();
 		}
-
 		case WM_KEYDOWN:
 		{
+			MouseCoordX = GET_X_LPARAM( lParam );
+			MouseCoordY = GET_Y_LPARAM( lParam );
+
 			switch( wParam )
 			{
-				case 0x51: // Q turn left
-				{
-
-					break;
-				}
-				case 0x45:
-				{
-
-					break;
-				}
-				case 0x41: // A move left
-				{
-
-					break;
-				}
-				case 0x44: // D move right
-				{
-
-					break;
-				}
-				case 0x57: // W move up
-				{
-
-					break;
-				}
 				case 0x53: // S move down
-				{
-
-					break;
-				}
-				case 0x5A: // Z scale up
-				{
-
-					break;
-				}
-				case 0x58: // X scale down
-				{
-
-					break;
-				}
-				case 0x46: // F map X
 				{
 
 					break;
 				}
 				case 0x47: // G start dragging
 				{
-					MouseCoordX = GET_X_LPARAM( lParam );
-					MouseCoordY = GET_Y_LPARAM( lParam );
-
 					SpaceScene.GetModel()->SetDragged( true );
-
 					break;
 				}
-				case 0x52: // R scale up around vertex
+				case 0x52: // R rotate around N vector
 				{
-
+					SpaceScene.GetModel()->SetRotated( true );
 					break;
 				}
 				case 0x54: // T scale down around vertex
@@ -188,15 +148,6 @@ LRESULT _stdcall WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 			double dx = GET_X_LPARAM( lParam ) - MouseCoordX;
 			double dy = GET_Y_LPARAM( lParam ) - MouseCoordY;
 
-			if( SpaceScene.GetModel()->isDragged() )
-			{
-				Vector3D MoveVector( dx, dy, 0 );
-				MoveVector.Normalize();
-				MoveVector.Y = -MoveVector.Y;
-				MoveVector = MoveVector * TranslationSpeed;
-
-				SpaceScene.GetModel()->Apply( Translation( MoveVector ) );
-			}
 			if( SpaceScene.IsRotating() ) // Mouse wheel is pushed => rotate scene
 			{
 				SpaceScene.RotateScene( dx, dy );
@@ -205,6 +156,22 @@ LRESULT _stdcall WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 			{
 				SpaceScene.MoveScene( dx, dy );
 			}
+			else
+			{
+				Vector3D MoveVector = SpaceScene.GetScreenVectorFromMouseMovement( dx, dy );
+
+				if( SpaceScene.GetModel()->isDragged() )
+				{
+					SpaceScene.GetModel()->Apply( Translation( MoveVector * TranslationSpeed ) );
+				}
+				else if( SpaceScene.GetModel()->isRotated() )
+				{
+					SpaceScene.GetModel()->Apply(
+						RotatePerpendicularToSight( SpaceScene.RotationAngleX, Vector3D(0,0,0), SpaceScene.GetN() ) );
+				}
+			}
+			
+			
 
 			MouseCoordX = GET_X_LPARAM( lParam );
 			MouseCoordY = GET_Y_LPARAM( lParam );
@@ -221,10 +188,12 @@ LRESULT _stdcall WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 
 			if( GetAsyncKeyState( VK_SHIFT ) )
 			{
+				SpaceScene.SetIsRotating( false );
 				SpaceScene.SetIsMoving( true );
 			}
 			else
 			{
+				SpaceScene.SetIsMoving( false );
 				SpaceScene.SetIsRotating( true );
 			}
 

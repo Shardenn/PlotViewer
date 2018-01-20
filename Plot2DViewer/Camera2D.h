@@ -72,10 +72,10 @@ public:
 
 	void LineTo( HDC dc, double X, double Y )
 	{
-		::MoveToEx( dc, posX, posY, nullptr );
+		::MoveToEx( dc, (int)posX, (int)posY, nullptr );
 		MoveTo( X, Y );
 
-		::LineTo( dc, posX, posY );
+		::LineTo( dc, (int)posX, (int)posY );
 	}
 
 	virtual void Axes( HDC dc )
@@ -119,7 +119,7 @@ public:
 
 	void Scale( POINT MousePosition, float Koeff )
 	{
-		Koeff = Koeff > 0 ? 1.1 : 0.9;
+		Koeff = Koeff > 0 ? 1.1f : 0.9f;
 
 		double Xw = ScreenToWorldX( MousePosition.x );
 		double Yw = ScreenToWorldY( MousePosition.y );

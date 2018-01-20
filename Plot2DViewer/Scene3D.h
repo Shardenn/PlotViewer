@@ -6,57 +6,95 @@
 
 class Scene3D : public Camera3D
 {
-	//Model3D m_Models [ 10 ] = {};
-	set<Model3D> m_Models;
-
+	Model3D m_Models [ 10 ];
+	int m_ModelsCount;
+	Model3D m_SelectedModel;
 	Model3D m_AxesModel;
 
 public:
-	Scene3D( double L, double R, double B, double T, set<Model3D> Models ) :
+	Scene3D( double L, double R, double B, double T, Model3D Models[], int ModelsCount ) :
 		Camera3D( L, R, B, T ),
-		m_AxesModel( "AxesVertices.txt", "AxesFaces.txt" )
+		m_AxesModel( "AxesVertices.txt", "AxesFaces.txt" ),
+		m_ModelsCount( ModelsCount + 1 )
 	{
-		for( auto CurModel : Models )
+		/* Initialize array of models */
+		for( int i = 0; i < ModelsCount; i++ )
 		{
-			m_Models.insert( CurModel );
+			m_Models[ i ] = Models[ i ];
 		}
+		m_Models[ ModelsCount ] = m_AxesModel;
+
+		m_SelectedModel = m_Models[ 0 ];
+
+		//Model3D AxesModel( "AxesVertices.txt", "AxesFaces.txt" );
+		//Models.insert( AxesModel );
 	}
 
 	void RenderAll( HDC dc );
+	void Render( HDC dc );
 
 	void RotateScene( double, double );
 	void MoveScene( double, double );
 	void ZoomScene( int );
 
-	set<Model3D> * GetAllModels() { return &m_Models; }
+	Vector3D GetScreenVectorFromMouseMovement( double dx, double dy );
+
+	Model3D * GetAllModels() { return m_Models; }
 
 	Model3D * GetModel()
 	{
-		for( auto Model : m_Models )
-		{
-			return &Model;
-		}
+		return &m_SelectedModel;
 	}
 };
+
+void Scene3D::Render( HDC dc )
+{	
+	UpdateCamera();
+
+	m_SelectedModel.Project( GetWorldToProject() );
+
+	Matrix<int> edges = m_SelectedModel.GetEdges();
+	for( int i = 1; i <= edges.GetRowsCount(); i++ )
+	{
+		double a = edges( i, 1 );
+		double b = edges( i, 2 );
+
+		double ProjectedX = m_SelectedModel.GetProjectedX( a );
+		double ProjectedY = m_SelectedModel.GetProjectedY( a );
+
+		MoveTo( ProjectedX, ProjectedY );
+
+		ProjectedX = m_SelectedModel.GetProjectedX( b );
+		ProjectedY = m_SelectedModel.GetProjectedY( b );
+
+		LineTo( dc, ProjectedX, ProjectedY );
+	}
+	
+}
 
 void Scene3D::RenderAll( HDC dc )
 {
 	UpdateCamera();
-
-	for( auto CurModel : m_Models )
+	
+	for( int l = 0; l < m_ModelsCount; l++ )
 	{
-		CurModel.Project( GetWorldToProject() );
+		Model3D CurrentlyDrawnModel = m_Models[ l ];
 
-		Matrix<int> edges = CurModel.GetEdges();
+		CurrentlyDrawnModel.Project( GetWorldToProject() );
+
+		Matrix<int> edges = CurrentlyDrawnModel.GetEdges();
 		for( int i = 1; i <= edges.GetRowsCount(); i++ )
 		{
-			double ProjectedX = CurModel.GetProjectedX( edges( i, 1 ) );
-			double ProjectedY = CurModel.GetProjectedY( edges( i, 1 ) );
+			double a = edges( i, 1 );
+			double b = edges( i, 2 );
+
+			double ProjectedX = CurrentlyDrawnModel.GetProjectedX( a );
+			double ProjectedY = CurrentlyDrawnModel.GetProjectedY( a );
 
 			MoveTo( ProjectedX, ProjectedY );
 
-			ProjectedX = CurModel.GetProjectedX( edges( i, 2 ) );
-			ProjectedY = CurModel.GetProjectedY( edges( i, 2 ) );
+			ProjectedX = CurrentlyDrawnModel.GetProjectedX( b );
+			ProjectedY = CurrentlyDrawnModel.GetProjectedY( b );
 
 			LineTo( dc, ProjectedX, ProjectedY );
 		}
@@ -86,21 +124,9 @@ void Scene3D::RotateScene( double dX, double dY )
 
 void Scene3D::MoveScene( double dX, double dY )
 {
-	if( !Vector3D::NormalizeVector2D( dX, dY ) )
-		return;
-	
-	double phiX = Vector3D::CosBetween( Vector3D( 1, 0, 0 ), Vector3D( dX, -dY, 0 ) );
-	double phiY = Vector3D::CosBetween( Vector3D( 0, 1, 0 ), Vector3D( dX, -dY, 0 ) );
+	Vector3D Movement = GetScreenVectorFromMouseMovement( dX, dY );
 
-	Vector3D RightVector = GetTop() ^ GetN();
-
-	Vector3D SideMovement = RightVector / phiX;
-	Vector3D VerticalMovement = GetTop() / phiY;
-
-	SideMovement.Normalize();
-	VerticalMovement.Normalize();
-
-	SetOv( GetOv() - ( SideMovement * abs( dX ) + VerticalMovement * abs( dY ) ) * MovingSpeed );
+	SetOv( GetOv() - ( Movement /* * abs( dX ) + VerticalMovement * abs( dY )*/ ) * MovingSpeed );
 }
 
 void Scene3D::ZoomScene( int WheelDelta )
@@ -109,4 +135,27 @@ void Scene3D::ZoomScene( int WheelDelta )
 
 	SetOv( GetOv() + GetN() * K );
 	SetD( GetD() + K * GetN().Length() );
+}
+
+/*
+* Returns vector that belongs to plane, perpendicular to camera sight
+* dx dy - mouse movement vector in 2d plane ( on table )
+*/
+Vector3D Scene3D::GetScreenVectorFromMouseMovement( double dx, double dy )
+{
+	if( !Vector3D::NormalizeVector2D( dx, dy ) )
+		return Vector3D( 0 );
+
+	double phiX = Vector3D::CosBetween( Vector3D( 1, 0, 0 ), Vector3D( dx, -dy, 0 ) );
+	double phiY = Vector3D::CosBetween( Vector3D( 0, 1, 0 ), Vector3D( dx, -dy, 0 ) );
+
+	Vector3D RightVector = GetTop() ^ GetN();
+
+	Vector3D HorizontalMovement = RightVector / phiX;
+	Vector3D VerticalMovement = GetTop() / phiY;
+	
+	VerticalMovement.Normalize();
+	HorizontalMovement.Normalize();
+	
+	return HorizontalMovement * abs( dx ) + VerticalMovement * abs( dy );
 }

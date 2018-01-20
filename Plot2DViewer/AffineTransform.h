@@ -163,11 +163,12 @@ Matrix<> Mapping( bool isXAxis )
 {
 	if ( isXAxis ) return Scailing( -1, 1 );
 	if ( !isXAxis ) return Scailing( 1, -1 );
+	return Scailing( 1, 1 );
 }
 
 Matrix<> ScaleAroundPoint( float CoordX, float CoordY, float ScaleSpeed, bool bScaleUp )
 {
-	float ScaleKoeff = bScaleUp ? 1.1 : 0.9;
+	float ScaleKoeff = bScaleUp ? 1.1f : 0.9f;
 	return Translation( CoordX, CoordY ) * 
 		Scailing( ScaleKoeff * ScaleSpeed, ScaleKoeff * ScaleSpeed )  *
 		Translation( -CoordX, -CoordY );
@@ -180,12 +181,23 @@ Matrix<> MapAroundLine( float FirstX, float FirstY, float SecondX, float SecondY
 		Mapping( false ) *
 		Rotation( SecondX-FirstX, FirstY-SecondY) *
 		Translation( -FirstX, -FirstY);
-	/*
-		Rotation( FirstY - SecondYFirstX - SecondX,  ) *
-		Mapping( true ) *
-		Rotation( SecondY - FirstY, FirstX - SecondX ) *
-		Translation( -FirstX, -FirstY );
-		*/
+}
+
+Matrix<> RotatePerpendicularToSight( float Angle, Vector3D LinePoint, Vector3D LineVector )
+{
+	Vector3D ProjectedVector = Vector3D( LineVector.X, 0, LineVector.Z );
+	/* What angle do we need to rotate in order to move vector in plane which contains X axis */
+	auto YCosAngle = Vector3D::CosBetween( ProjectedVector, Vector3D( 1, 0, 0 ) );
+	auto NewX = ProjectedVector.Length();
+	auto ZCosAngle = Vector3D::CosBetween( Vector3D( 1, 0, 0 ), Vector3D( NewX, LineVector.Y, 0 ) );
+
+	return Translation( LinePoint ) *
+		RotationY( -YCosAngle ) *
+		RotationZ( ZCosAngle ) *
+		RotationX( Angle ) *
+		RotationZ( -ZCosAngle ) *
+		RotationY( YCosAngle )*
+		Translation( LinePoint * (-1) );
 }
 
 #endif AFFINE_TRANSFORM_H

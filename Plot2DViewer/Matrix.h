@@ -51,7 +51,7 @@ public:
 		return m_cells[ i - 1 ][ j - 1 ];
 	}
 
-	Matrix& operator = ( const Matrix& );		// Перегрузка оператора присваивания
+	Matrix *operator = ( const Matrix& );		// Перегрузка оператора присваивания
 	Matrix  operator + ( const Matrix& );		// Сложение матриц
 	Matrix  operator - ( const Matrix& );		// Вычитание матриц
 	Matrix  operator * ( const Matrix& );		// Умножение матриц
@@ -99,7 +99,7 @@ Matrix<Cell>::~Matrix()
 }
 
 template <typename Cell>
-Matrix<Cell>& Matrix<Cell>::operator=( const Matrix& M )
+Matrix<Cell> * Matrix<Cell>::operator=( const Matrix& M )
 {
 	if( m_Rows != M.m_Rows || m_Columns != M.m_Columns )
 	{
@@ -110,7 +110,7 @@ Matrix<Cell>& Matrix<Cell>::operator=( const Matrix& M )
 		for( int j = 0; j < m_Columns; j++ )
 			m_cells[ i ][ j ] = M.m_cells[ i ][ j ];
 
-	return *this;
+	return this;
 }
 
 template <typename Cell>

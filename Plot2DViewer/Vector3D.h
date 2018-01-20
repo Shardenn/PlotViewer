@@ -35,7 +35,7 @@ public:
 	}
 
 	/* Dot product */
-	float operator | ( const Vector3D & other ) const
+	double operator | ( const Vector3D & other ) const
 	{
 		return X * other.X + Y * other.Y + Z * other.Z;
 	}
@@ -93,14 +93,14 @@ public:
 		return X != other.X && Y != other.Y && Z != other.Z;
 	}
 
-	float Length()
+	double Length()
 	{
 		return sqrt( X * X + Y * Y + Z * Z );
 	}
 
 	void Normalize()
 	{
-		const float fLength = Length();
+		const double fLength = Length();
 
 		if( fLength == 0 )
 			return;

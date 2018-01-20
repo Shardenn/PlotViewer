@@ -15,9 +15,9 @@ private:
 	int			m_FacesCount;
 	Matrix<>	m_CumulativeAT;
 
-	bool bIsDragged = false;
-	bool bIsRotated = false;
-	bool bIsScaled = false;
+	bool bIsDragged = false,
+		bIsRotated = false,
+		bIsScaled = false;
 
 public:
 	Model3D() :
@@ -63,6 +63,9 @@ public:
 	bool isDragged()									{ return bIsDragged; }
 	void SetDragged( bool NewDragged )					{ bIsDragged = NewDragged; }
 
+	bool isRotated()									{ return bIsRotated; }
+	void SetRotated( bool NewRotated )					{ bIsRotated = NewRotated; }
+
 	void StopAllActions()
 	{
 		bIsDragged = false;
@@ -100,7 +103,6 @@ double Model3D::GetVertexX( int Num )
 double Model3D::GetVertexY( int Num )
 {
 	return m_Vertices( 2, Num ) / m_Vertices( 4, Num );
-
 }
 
 double Model3D::GetVertexZ( int Num )
